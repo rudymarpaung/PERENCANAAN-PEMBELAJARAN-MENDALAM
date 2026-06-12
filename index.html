@@ -1,45 +1,286 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GENERATOR PERENCANAAN PEMBELAJARAN MENDALAM</title>
-  <link rel="icon" href="https://i.imgur.com/TiHjLeh.png" />
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #eee;
-      overflow: hidden; /* Mencegah scroll ganda */
-    }
-
-    .iframe-container {
-      width: 100%;
-      height: 100dvh; /* Menggunakan dvh agar pas di mobile browser */
-      overflow: hidden;
-    }
-
-    iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator RPP - Rudy S. Marpaung</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Library Pembuat Word -->
+    <script src="https://cdn.jsdelivr.net/gh/rachyat/html-docx-js@master/dist/html-docx.js"></script>
+    <!-- Axios untuk Koneksi ke Gemini via GitHub -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body>
-  <div class="iframe-container">
-    <iframe
-      id="app"
-      src="https://script.google.com/macros/s/AKfycbzPWEEr9t4gVPpwytFTsL1jptyzMg-vOU8AG2SYeJE-Y3_ufly-DX4-P-X50j0LQVE/exec"
-      scrolling="yes"
-      allowfullscreen="true"
-      webkitallowfullscreen="true"
-      mozallowfullscreen="true"
-      allow="fullscreen; camera; microphone; display-capture; geolocation;">
-    </iframe>
-  </div>
+<body class="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen pb-12">
+
+    <!-- HEADER DENGAN LOGO ASLI UPTD SDN 014688 SIDOMUKTI -->
+    <header class="bg-gradient-to-r from-violet-600 to-indigo-700 text-white text-center py-10 px-4 shadow-lg mb-8 rounded-b-3xl flex flex-col items-center justify-center">
+        <!-- Logo Asli Sekolah Anda -->
+        <img src="https://i.imgur.com/TiHjLeh.png" alt="Logo UPTD SDN 014688 Sidomukti" class="h-24 w-auto mb-4 drop-shadow-md">
+        
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Generator Perencanaan Pembelajaran Mendalam</h1>
+        <p class="text-rose-300 mt-2 text-sm md:text-base font-medium italic">Oleh : Rudy S. Marpaung - UPTD SDN 014688 Sidomukti</p>
+        <p class="text-violet-200 mt-1 text-xs md:text-sm">Alat Pencetak RPP/Modul Ajar jadi file word</p>
+    </header>
+
+    <!-- FORM INPUT -->
+    <main class="max-w-4xl mx-auto px-4">
+        <div class="space-y-6">
+            
+            <!-- 1. INFORMASI UMUM -->
+            <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-indigo-900 border-b pb-3 mb-5">1. Informasi Umum</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Mata Pelajaran</label>
+                        <input type="text" id="mapel" placeholder="Contoh: IPAS" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Jenjang</label>
+                        <select id="jenjang" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="SD/MI">SD/MI</option>
+                            <option value="SLB">SLB</option>
+                            <option value="PAUD">PAUD</option>
+                            <option value="SMA/MA">SMA/MA</option>
+                            <option value="SMK">SMK</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Kelas</label>
+                        <input type="text" id="kelas" placeholder="Contoh: 5" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Semester</label>
+                        <select id="semester" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Ganjil">Ganjil</option>
+                            <option value="Genap">Genap</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Jumlah Pertemuan</label>
+                        <input type="number" id="pertemuan" value="1" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Durasi (Contoh: 2 x 45 menit)</label>
+                        <input type="text" id="durasi" placeholder="Contoh: 2 x 45 menit" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. IDENTIFIKASI -->
+            <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-indigo-900 border-b pb-3 mb-3">2. Identifikasi</h2>
+                <p class="text-xs text-slate-500 mb-4">Dimensi Profil Lulusan yang Dikembangkan (Pilih &ge; 1)</p>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Keimanan & Ketakwaan (DPL1)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Keimanan & Ketakwaan (DPL1)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Penalaran Kritis (DPL3)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Penalaran Kritis (DPL3)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Kolaborasi (DPL5)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Kolaborasi (DPL5)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Kesehatan (DPL7)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Kesehatan (DPL7)</span>
+                        </label>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Kwargaan (DPL2)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Kewargaan (DPL2)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Kreativitas (DPL4)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Kreativitas (DPL4)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Kemandirian (DPL6)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Kemandirian (DPL6)</span>
+                        </label>
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" name="dimensi" value="Komunikasi (DPL8)" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm text-slate-700">Komunikasi (DPL8)</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. DESAIN PEMBELAJARAN -->
+            <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h2 class="text-xl font-bold text-indigo-900 border-b pb-3 mb-5">3. Desain Pembelajaran</h2>
+                
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Capaian Pembelajaran</label>
+                        <textarea id="capaian" rows="3" placeholder="Tuliskan capaian pembelajaran sesuai fase" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Tujuan Pembelajaran</label>
+                        <textarea id="tujuan" rows="3" placeholder="Tuliskan tujuan pembelajaran" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Topik Pembelajaran</label>
+                        <input type="text" id="topik" placeholder="Tuliskan topik pembelajaran yang relevan dengan CP dan TP" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    
+                    <!-- PRAKTIK PEDAGOGIS -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-3">Praktik Pedagogis (Model/Strategi/Metode)</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" name="pedagogis" value="Problem-Based Learning" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm text-slate-700">Problem-Based Learning</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" name="pedagogis" value="Inkuiri Terbimbing" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm text-slate-700">Inkuiri Terbimbing</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" name="pedagogis" value="Pembelajaran Langsung" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm text-slate-700">Pembelajaran Langsung</span>
+                                </label>
+                            </div>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" name="pedagogis" value="Project-Based Learning" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm text-slate-700">Project-Based Learning</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" name="pedagogis" value="Discovery Learning" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm text-slate-700">Discovery Learning</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 cursor-pointer">
+                                    <input type="checkbox" name="pedagogis" value="Pembelajaran Kontekstual" class="w-4 h-4 text-indigo-600">
+                                    <span class="text-sm text-slate-700">Pembelajaran Kontekstual</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LOGIKA LKPD -->
+                    <div class="border-t pt-4 mt-4">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Butuh Lampiran LKPD?</label>
+                        <p class="text-xs text-slate-500 mb-3">Jika "Ya", AI akan membuatkan draf LKPD (Lampiran 3) berdasarkan Tujuan Pembelajaran Anda.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="flex items-center gap-2.5 cursor-pointer p-2.5 bg-slate-50 rounded-xl border hover:bg-slate-100">
+                                <input type="radio" name="butuh_lkpd" value="Ya" class="w-4 h-4 text-indigo-600">
+                                <span class="text-sm text-slate-700 font-medium">Ya, buatkan draf LKPD</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer p-2.5 bg-slate-50 rounded-xl border hover:bg-slate-100">
+                                <input type="radio" name="butuh_lkpd" value="Tidak" checked class="w-4 h-4 text-indigo-600">
+                                <span class="text-sm text-slate-700 font-medium">Tidak, terima kasih</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <div class="text-right">
+                <button type="button" id="btn-generate" class="w-full sm:w-auto px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all">
+                    Buat Perencanaan Pembelajaran
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- HASIL GENERATE -->
+    <main class="max-w-4xl mx-auto px-4 mt-8">
+        <section id="hasil-container" class="hidden bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-3 mb-5 gap-4">
+                <h2 class="text-xl font-bold text-indigo-900">✨ Hasil Perencanaan Pembelajaran</h2>
+                <button type="button" id="btn-download" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold rounded-xl shadow">
+                    💾 Unduh File Word (.doc)
+                </button>
+            </div>
+            <div id="output-ai" class="text-slate-700 whitespace-pre-wrap bg-slate-50 p-6 rounded-xl border border-slate-200 font-sans text-sm leading-relaxed"></div>
+        </section>
+    </main>
+
+    <script>
+        // Kunci API Rahasia yang langsung memproses dari sisi klien GitHub
+        const API_KEY = "AQ.Ab8RN6Izuan9qQoj22wp4cAhwDI3WJsYPaIFV3ihfmTiXrkbkg"; 
+
+        const btnGenerate = document.getElementById('btn-generate');
+        const btnDownload = document.getElementById('btn-download');
+        const hasilContainer = document.getElementById('hasil-container');
+        const outputAi = document.getElementById('output-ai');
+
+        btnGenerate.addEventListener('click', function() {
+            let dimensiTerpilih = [];
+            document.querySelectorAll('input[name="dimensi"]:checked').forEach(cb => dimensiTerpilih.push(cb.value));
+
+            let pedagogisTerpilih = [];
+            document.querySelectorAll('input[name="pedagogis"]:checked').forEach(cb => pedagogisTerpilih.push(cb.value));
+
+            const lkpdOpsi = document.querySelector('input[name="butuh_lkpd"]:checked').value;
+
+            const mapel = document.getElementById('mapel').value;
+            const jenjang = document.getElementById('jenjang').value;
+            const kelas = document.getElementById('kelas').value;
+            const semester = document.getElementById('semester').value;
+            const pertemuan = document.getElementById('pertemuan').value;
+            const durasi = document.getElementById('durasi').value;
+            const capaian = document.getElementById('capaian').value;
+            const tujuan = document.getElementById('tujuan').value;
+            const topik = document.getElementById('topik').value;
+            const dimensi = dimensiTerpilih.join(', ');
+            const pedagogis = pedagogisTerpilih.join(', ');
+
+            if(!mapel || !kelas || !tujuan) {
+                alert("Mohon isi minimal Mata Pelajaran, Kelas, dan Tujuan Pembelajaran.");
+                return;
+            }
+
+            btnGenerate.innerText = "Sedang Menyusun Modul...";
+            btnGenerate.disabled = true;
+            hasilContainer.classList.remove('hidden');
+            outputAi.innerText = "Menghubungkan langsung ke Gemini AI via GitHub... Mohon tunggu.";
+
+            let instruksiLkpd = "";
+            if (lkpdOpsi === "Ya") {
+                instruksiLkpd = `- PENTING: Karena user memilih opsi "Ya, buatkan draf LKPD", maka pada bagian "III. LAMPIRAN A. Lembar Kerja Peserta Didik (LKPD)", buatkan draf soal latihan atau tugas kelompok yang lengkap dan siap dikerjakan siswa berdasarkan Tujuan Pembelajaran yang diinput.`;
+            } else {
+                instruksiLkpd = `- Pada bagian "III. LAMPIRAN A. Lembar Kerja Peserta Didik (LKPD)", cukup buat draf petunjuk kerja umum singkat saja tanpa rincian soal latihan tambahan.`;
+            }
+
+            const promptSistem = `Buatkan sebuah Perencanaan Pembelajaran (Modul Ajar Kurikulum Merdeka) mendalam yang terstruktur rapi dengan format teks biasa (Gunakan penomoran manual, JANGAN gunakan format markdown bintang-bintang atau pagar). Detail Komponen: Mata Pelajaran: ${mapel}, Jenjang/Kelas: ${jenjang} / Kelas ${kelas}, Semester: ${semester}, Alokasi Waktu: ${pertemuan} Pertemuan (${durasi}), Dimensi Profil Lulusan (PPP): ${dimensi || 'Mandiri'}, Topik Pembelajaran: ${topik || 'Materi Inti'}, Praktik Pedagogis (Model): ${pedagogis || 'Pembelajaran Kontekstual'}, Capaian Pembelajaran: ${capaian}, Tujuan Pembelajaran: ${tujuan}. Aturan Isi Lampiran LKPD: ${instruksiLkpd}. Struktur Wajib Dokumen: I. INFORMASI UMUM (A. Identitas Modul, B. Kompetensi Awal, C. Profil Pelajar Pancasila, D. Sarana Prasarana) II. KOMKOMPENEN INTI (A. Tujuan Pembelajaran, B. Pemahaman Bermakna, C. Pertanyaan Pemantik, D. Kegiatan Pembelajaran sesuai model ${pedagogis}, E. Asesmen) III. LAMPIRAN (A. LKPD, B. Bahan Bacaan, C. Glosarium & Daftar Pustaka)`;
+
+            // Request Axios langsung tembak API Key dari GitHub Pages (Bebas aturan CORS browser)
+            axios.post(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                contents: [{ parts: [{ text: promptSistem }] }]
+            })
+            .then(response => {
+                const text = response.data.candidates[0].content.parts[0].text;
+                outputAi.innerText = text.replace(/\*/g, '');
+            })
+            .catch(error => {
+                console.error(error);
+                outputAi.innerText = "Koneksi gagal. Pastikan pengaturan repositori GitHub Pages Anda sudah diperbarui.";
+            })
+            .finally(() => {
+                btnGenerate.innerText = "Buat Perencanaan Pembelajaran";
+                btnGenerate.disabled = false;
+            });
+        });
+
+        btnDownload.addEventListener('click', function() {
+            const teksKonten = outputAi.innerText;
+            const formatHtml = `<html><head><meta charset="utf-8"></head><body style="font-family:Arial; line-height:1.5;">${teksKonten.split('\n').map(l => `<p>${l}</p>`).join('')}</body></html>`;
+            const converted = htmlDocx.asBlob(formatHtml);
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(converted);
+            link.download = `Modul_Ajar_${document.getElementById('mapel').value || 'Materi'}.doc`;
+            link.click();
+        });
+    </script>
 </body>
 </html>
